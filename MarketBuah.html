@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market</title>
+</head>
+<body></body>
+<script>
+        let produk = [
+            {
+                buah    : 'Apel',
+                harga   : 20000,
+                stok    : 100
+            },
+            {
+                buah    : 'Jeruk',
+                harga   : 20000,
+                stok    : 100
+            },
+            {
+                buah    : 'Anggur',
+                harga   : 20000,
+                stok    : 100
+            }
+        ]
+
+        let jumlah = []
+
+        class TambahProduk {
+            constructor(buah, harga, stok) {
+                this.buah = buah,
+                this.harga = harga,
+                this.stok = stok
+            }
+        }
+
+        function LihatProduk () {
+            let menu = "SELAMAT DATANG \n"
+            for (let i = 0; i < produk.length; i++) {
+                menu += `${i + 1}. ${produk[i].buah} = Rp. ${produk[i].harga},00 /kg \n`
+            }
+            alert(menu)
+        }
+
+        function InputJumlah () {
+            for (let i = 0; i < produk.length; i++) {
+                inputloop : while (true) {
+                    jumlah[i] = parseInt(prompt(`Masukkan total ${produk[i].buah} (kg) yang ingin anda beli `))
+                    if (isNaN(jumlah[i])) {
+                        alert("Input anda salah")
+                    } else if (jumlah[i] > produk[i].stok) {
+                        alert("Maaf, input anda melebihi stok")
+                    } else {
+                        break inputloop
+                    }
+                }
+            }
+        }
+
+        function TotalBelanja () {
+            let total = []
+            for (let i = 0; i < jumlah.length; i++) {
+                total.push(produk[i].harga * jumlah[i])
+            }
+            return total
+        }
+
+        function DetailBelanja () {
+            let total = TotalBelanja() 
+            let detail = "Detail belanja anda : \n"
+            for (let i = 0; i < jumlah.length; i++) {
+                detail += `Total ${produk[i].buah} : ${jumlah[i]} kg x Rp. ${produk[i].harga},00 = Rp. ${total[i]},00 \n`
+            }
+            detail += `Total yang harus dibayar = Rp. ${total.reduce((a, b) => a + b)},00`
+            alert(detail)
+        }
+
+        function KurangiStok () {
+            for (let i = 0; i < stok.length; i++) {
+                produk[i].stok -= jumlah[i]
+            }
+        }
+
+        function EditProduk () {
+            let lama = ''
+            let baru = ''
+            for (let i = 0 ; i < produk.length ; i++) {
+                lama += `${i+1}. ${produk[i].buah} \n`
+            }
+            edit : while (true) {
+                baru = parseInt(prompt(`${lama} \n Pilih produk yang ingin di edit`))
+                if (baru > produk.length) {
+                    alert('Input anda salah')
+                } else {
+                    break edit
+                }
+            }
+            let NewBuah
+            let NewHarga
+            let NewStok
+
+            NewBuah : while (true) {
+                NewBuah = prompt('Masukkan nama')
+                if (NewBuah == undefined || NewBuah == '') {
+                    alert('Input salah')
+                } else {
+                    break NewBuah
+                } 
+            }
+            NewHarga : while (true) {
+                NewHarga = prompt('Masukkan harga')
+                if (NewHarga == isNaN || NewHarga == 0) {
+                    alert('Input salah')
+                } else {
+                    break NewHarga
+                } 
+            }
+            NewStok : while (true) {
+                NewStok = prompt('Masukkan stok')
+                if (NewStok == isNaN || NewStok == 0) {
+                    alert('Input salah')
+                } else {
+                    break NewStok
+                } 
+            }
+            produk[baru-1].buah = NewBuah
+            produk[baru-1].harga = NewHarga
+            produk[baru-1].stok = NewStok
+
+        }
+
+
+        let pesan = `
+            SELAMAT DATANG
+        Silahkan pilih menu :
+        1. Tambah produk
+        2. Lihat semua produk
+        3. Edit produk
+        4. Beli produk
+        5. Keluar
+        `
+
+        home : while (true) {
+            let pilih =parseInt(prompt(pesan))
+            if (pilih === 1) {
+                let buah = prompt('Masukkan nama produk ')
+                let harga = prompt('Masukkan harga')
+                let stok = prompt('Masukkan jumlah')
+                let confirmation = confirm('Apakah anda yakin ?')
+                if (confirmation == true) {
+                    produk.push(new TambahProduk(buah, harga, stok))
+                }
+            } else if (pilih === 2) {
+                LihatProduk()
+            } else if (pilih === 3) {
+                EditProduk()
+            } else if (pilih === 4) {
+                utama : while (true) {
+                    LihatProduk()
+                    InputJumlah()
+                    DetailBelanja()
+                    let uangDariUser
+                    let total = TotalBelanja()
+                    let totalYangHarusDibayar = total.reduce((a, b) => a + b)
+                    while (true) {
+                        uangDariUser = parseInt(prompt("Masukkan nominal uang anda"))
+                        if (uangDariUser < totalYangHarusDibayar) {
+                            alert("Maaf, uang anda kurang.")
+                        } else if (isNaN(uangDariUser)) {
+                            alert("Input anda salah")
+                        } else {
+                            break
+                        }
+                    }
+
+                    let kembalian = uangDariUser - totalYangHarusDibayar
+                    if (kembalian > 0) {
+                        alert(`
+                            Uang kembalian : Rp ${kembalian},00 
+                            Terima kasih sudah berbelanja di toko kami   
+                        `)
+                    } else {
+                        alert("Terima kasih sudah berbelanja di toko kami")
+                    }
+
+                    KurangiStok()
+
+                    let confirmation = confirm("Apakah anda ingin belanja lagi?")
+                    if (confirmation === false) {
+                        break utama
+                    }
+                }
+        
+            } else if (pilih === 5) {
+                break home
+            }
+        }
+
+        
+      
+
+        
+</script>
+</html>
